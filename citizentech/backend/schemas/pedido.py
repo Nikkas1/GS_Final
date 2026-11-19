@@ -34,7 +34,7 @@ class PedidoEntrada(BaseModel):
 
 
 class TriagemIA(BaseModel):
-    """Saída estruturada que o LLM é obrigado a preencher (tool use + validação Pydantic)."""
+    """Saída estruturada que o LLM é obrigado a preencher (JSON Schema na API + validação Pydantic)."""
     categoria: Categoria
     urgencia: Urgencia = Field(description="alta = risco imediato à pessoa, golpe em andamento ou perigo na via")
     resumo: TextoCurto(200, "Uma frase com o problema")

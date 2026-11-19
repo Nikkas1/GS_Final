@@ -1,7 +1,7 @@
 # OuviAí Cidade · CitizenTech
 
 > Global Solution 2026/2 · Front-end em Sistemas de IA (FIAP)
-> Integrantes: Alexandre Ferreira (RM 565626), Carlos Eduardo (RM 555812), Filipe Melo (RM 564571) · Deploy: Docker, `docker compose up --build` (seção 4) · Vídeo: **PREENCHER**
+> Integrantes: Alexandre Ferreira (RM 565626), Carlos Eduardo (RM 555812), Filipe Melo (RM 564571) · Deploy: Docker, `docker compose up --build` (seção 4) · Vídeo: https://youtu.be/W1fvL07ybzc
 
 O OuviAí começou na disciplina de IoT como um classificador de sons no celular, que reconhece campainha e batida na porta para avisar uma pessoa com deficiência auditiva. Aqui ele ganha a camada que faltava, uma interface onde esses avisos aparecem por escrito e onde a mesma pessoa consegue pedir ajuda ao poder público sem precisar telefonar, porque, sejamos honestos, quase todo serviço público ainda começa com "ligue para".
 
@@ -30,7 +30,7 @@ flowchart LR
   U[Cidadão / cuidador] --> F[Streamlit<br/>features · ui · state · providers]
   F -- HTTP --> API[FastAPI<br/>routers · schemas]
   API --> P[pipelines<br/>triagem · eventos · privacidade · visão]
-  P --> L[providers/llm.py<br/>Claude via tool use]
+  P --> L[providers/llm.py<br/>Claude com saída estruturada]
   P --> R[(providers/repositorio.py<br/>SQLite em volume)]
   P --> M[providers/modelo.py<br/>modelo de fissuras · VC]
 ```
@@ -57,7 +57,7 @@ tests/           pytest da API, dos pipelines e do provedor de LLM, sem interfac
 - **Configuração validada:** `core/config.py` lê o `.env` com `pydantic-settings`; CORS com `*` é recusado já na inicialização.
 - **Lifespan e injeção de dependência:** cliente do LLM, conexão SQLite e modelo de visão são criados uma vez no `lifespan` e entregues aos endpoints por `Depends`. Nos testes trocamos o LLM com `app.dependency_overrides`, sem monkeypatch em módulo.
 - **Async onde há espera:** a triagem usa `AsyncAnthropic` dentro de um endpoint `async`, e a inferência do TensorFlow roda em `run_in_threadpool` para não travar o event loop.
-- **Saída estruturada de verdade:** o LLM é obrigado a chamar a ferramenta `registrar_triagem`, cujo `input_schema` é o JSON Schema gerado pelo próprio `TriagemIA`. O retorno ainda passa pelo Pydantic, com uma nova tentativa se vier fora do formato.
+- **Saída estruturada de verdade:** a chamada usa o recurso de saída estruturada da API (`output_config` com `json_schema`), e o schema é gerado do próprio `TriagemIA`, então a resposta do modelo já vem no formato. O retorno ainda passa pelo Pydantic, que corta texto longo e faz uma nova tentativa se vier fora do formato.
 - **Erros com status certo:** 422 (campo inválido, com a lista de campos), 404, 502 (IA fora do formato), 503 (sem chave ou credencial recusada), 504 (timeout). O detalhe técnico fica no log do servidor.
 - **Documentação:** `/docs` com tags, resumos e exemplos de resposta de erro para cada rota.
 

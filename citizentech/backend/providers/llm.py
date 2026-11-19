@@ -1,10 +1,11 @@
 """Único ponto de acesso ao LLM. Trocar de provedor = mexer só aqui.
 
-A saída estruturada usa *tool use* forçado: o modelo é obrigado a "chamar" a
-ferramenta `registrar_triagem`, cujo input_schema é o JSON Schema gerado pelo
-próprio modelo Pydantic. Assim não dependemos de regex para achar um JSON no
-meio do texto, e o que volta ainda é validado pelo Pydantic no pipeline.
+A saída estruturada usa o recurso nativo da API (output_config.format com
+json_schema): a resposta do modelo é obrigada a seguir o JSON Schema gerado
+pelo próprio modelo Pydantic. Assim não dependemos de regex para achar um JSON
+no meio do texto, e o que volta ainda é validado pelo Pydantic no pipeline.
 """
+import json
 from typing import Protocol
 
 from pydantic import BaseModel
@@ -22,8 +23,13 @@ class TempoEsgotado(ErroProvedor):
     pass
 
 
-def schema_sem_refs(modelo: type[BaseModel]) -> dict:
-    """JSON Schema do Pydantic com os $ref resolvidos (enums ficam inline)."""
+# palavras-chave do JSON Schema que a saída estruturada da API não aceita;
+# os limites continuam valendo, porque o Pydantic valida (e corta) depois
+NAO_SUPORTADAS = {"title", "minLength", "maxLength", "default", "examples"}
+
+
+def schema_para_api(modelo: type[BaseModel]) -> dict:
+    """JSON Schema do Pydantic com os $ref resolvidos e no formato aceito pela API."""
     schema = modelo.model_json_schema()
     defs = schema.pop("$defs", {})
 
@@ -32,7 +38,11 @@ def schema_sem_refs(modelo: type[BaseModel]) -> dict:
             if "$ref" in no:
                 extra = {k: v for k, v in no.items() if k != "$ref"}
                 return {**resolver(defs[no["$ref"].split("/")[-1]]), **resolver(extra)}
-            return {k: resolver(v) for k, v in no.items()}
+            limpo = {k: resolver(v) for k, v in no.items() if k not in NAO_SUPORTADAS}
+            if limpo.get("type") == "object":
+                limpo["additionalProperties"] = False
+                limpo["required"] = list(limpo.get("properties", {}))
+            return limpo
         if isinstance(no, list):
             return [resolver(v) for v in no]
         return no
@@ -56,18 +66,12 @@ class AnthropicLLM:
 
         if self._cliente is None:
             raise ProvedorIndisponivel("ANTHROPIC_API_KEY não configurada")
-        ferramenta = {
-            "name": "registrar_triagem",
-            "description": "Registra a triagem estruturada do pedido do cidadão.",
-            "input_schema": schema_sem_refs(schema),
-        }
         try:
             resp = await self._cliente.messages.create(
                 model=self._modelo,
                 max_tokens=1024,
                 system=system,
-                tools=[ferramenta],
-                tool_choice={"type": "tool", "name": "registrar_triagem"},
+                output_config={"format": {"type": "json_schema", "schema": schema_para_api(schema)}},
                 messages=[{"role": "user", "content": usuario}],
             )
         except anthropic.APITimeoutError as e:
@@ -77,10 +81,11 @@ class AnthropicLLM:
         except anthropic.APIError as e:
             raise ErroProvedor(str(e)) from e
 
-        for bloco in resp.content:
-            if bloco.type == "tool_use":
-                return bloco.input
-        raise ErroProvedor("o modelo não devolveu a ferramenta")
+        texto = "".join(b.text for b in resp.content if b.type == "text")
+        try:
+            return json.loads(texto)
+        except json.JSONDecodeError as e:
+            raise ErroProvedor("o modelo não devolveu JSON") from e
 
     async def fechar(self):
         if self._cliente is not None:

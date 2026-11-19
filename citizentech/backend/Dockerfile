@@ -7,9 +7,10 @@ COPY requirements.txt requirements-vision.txt ./
 RUN pip install --no-cache-dir -r requirements.txt \
  && if [ "$INSTALL_VISION" = "true" ]; then pip install --no-cache-dir -r requirements-vision.txt; fi
 
-COPY . .
 # usuário sem privilégio; /data é o volume do banco SQLite
 RUN useradd --create-home --uid 1000 app && mkdir -p /data && chown app /data
+# --chown: o usuário app vira dono dos arquivos e consegue ler mesmo os que estão com permissão restrita na máquina
+COPY --chown=app:app . .
 USER app
 
 EXPOSE 8000
