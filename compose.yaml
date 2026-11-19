@@ -1,0 +1,62 @@
+# Tudo que tem código executável na GS, a partir da raiz do repositório.
+#
+#   docker compose up -d --build      Front-end (http://localhost:8501) e página dos relatórios do robô (http://localhost:8080)
+#   docker compose run --rm rpa       Robô Cuidador do zero, com a semana de demonstração
+#   docker compose run --rm rpa-de-novo   segunda execução (não reindexa nem reenvia e-mail)
+#   docker compose run --rm rpa-falhas    entradas inválidas e caminho seguro
+#   docker compose run --rm testes        pytest do Front-end
+#   docker compose run --rm rpa-testes    pytest do robô
+#   docker compose down
+name: gs-citizentech
+
+include:
+  - citizentech/docker-compose.yml
+
+x-rpa: &rpa
+  build: ./RPA/rpa-ouviai
+  profiles: ["rpa"]
+  env_file:
+    - path: ./RPA/rpa-ouviai/.env
+      required: false
+  volumes:
+    - ./RPA/rpa-ouviai/saida:/app/saida
+    - ./RPA/rpa-ouviai/logs:/app/logs
+    - ./RPA/rpa-ouviai/estado:/app/estado
+
+services:
+  # apaga estado e log antes de rodar: cada execução vira a primeira da semana
+  rpa:
+    <<: *rpa
+    entrypoint: ["sh", "-c", "find estado logs -mindepth 1 -delete; exec python main.py \"$@\"", "--"]
+    command: ["--offline", "--data", "2026-11-08T23:30"]
+
+  rpa-de-novo:
+    <<: *rpa
+    command: ["--offline", "--data", "2026-11-08T23:30"]
+
+  rpa-falhas:
+    <<: *rpa
+    command: ["--demo-falhas", "--offline", "--forcar-envio", "--data", "2026-11-08T23:30"]
+
+  rpa-testes:
+    <<: *rpa
+    volumes: []
+    entrypoint: ["python", "-m", "pytest", "-q"]
+    command: []
+
+  # página com o relatório HTML, a planilha e o robo.log gerados pelo robô
+  relatorios-rpa:
+    image: python:3.11-slim
+    working_dir: /srv
+    volumes:
+      - ./RPA/rpa-ouviai/saida:/srv/saida:ro
+      - ./RPA/rpa-ouviai/logs:/srv/logs:ro
+    ports:
+      - "8080:8080"
+    command:
+      - python
+      - -c
+      - |
+        import mimetypes, http.server as h
+        mimetypes.add_type("text/plain; charset=utf-8", ".log")
+        h.test(HandlerClass=h.SimpleHTTPRequestHandler, port=8080, bind="0.0.0.0")

@@ -1,0 +1,44 @@
+# OuviAí Cidade (Front-end em Sistemas de IA)
+#   cp .env.example .env            preencha ANTHROPIC_API_KEY (ou use LLM_PROVIDER=simulado)
+#   docker compose up --build       front em http://localhost:8501 · API em http://localhost:8000/docs
+#   docker compose run --rm testes  pytest da API e dos pipelines, sem subir a interface
+services:
+  backend:
+    build:
+      context: ./backend
+      args:
+        # INSTALL_VISION=true docker compose up --build  (precisa de models/modelo.keras)
+        INSTALL_VISION: "${INSTALL_VISION:-false}"
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      DB_PATH: /data/ouviai.db
+      MODEL_PATH: /app/models/modelo.keras
+      ALLOWED_ORIGINS: "${ALLOWED_ORIGINS:-http://localhost:8501}"
+    volumes:
+      - ouviai-dados:/data
+      - ./models:/app/models:ro
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    environment:
+      API_URL: http://backend:8000   # nome do serviço na rede interna do compose
+    ports:
+      - "8501:8501"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+
+  testes:
+    profiles: ["testes"]
+    build:
+      context: .
+      dockerfile: tests/Dockerfile
+
+volumes:
+  ouviai-dados:
