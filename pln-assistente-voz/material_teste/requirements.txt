@@ -1,0 +1,9 @@
+faster-whisper
+jiwer
+edge-tts
+gradio
+faiss-cpu
+sentence-transformers
+num2words
+openai
+pandas

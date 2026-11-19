@@ -1,0 +1,21 @@
+arquivo,voz,ruido,referencia,tiny_texto,tiny_wer,tiny_s,small_texto,small_wer,small_s
+audio_01.mp3,pt-BR-AntonioNeural,0,Quais documentos preciso levar para fazer o Cartão do SUS?,Quais documentos preciso levar para fazer o cartão do sujo?,0.1,1.093,Quais documentos preciso levar para fazer o cartão do SUS?,0.0,7.545
+audio_02.mp3,pt-BR-AntonioNeural,0,Onde eu agendo uma consulta básica na UBS?,onde eu agendo uma consulta básica na OBS.,0.125,0.98,onde eu agendo uma consulta básica na UBS?,0.0,6.233
+audio_03.mp3,pt-BR-AntonioNeural,0,Quem pode se inscrever no CadÚnico?,Quem pode se inscrever no CAD-Unico?,0.1667,1.026,Quem pode se inscrever no Cade Único?,0.3333,7.523
+audio_04.mp3,pt-BR-AntonioNeural,1,Quais remédios são gratuitos na Farmácia Popular?,Quais remédios são gratuitos na farmácia popular?,0.0,1.074,Quais remédios são gratuitos na farmácia popular?,0.0,6.943
+audio_05.mp3,pt-BR-AntonioNeural,1,Preciso de receita médica para pegar remédio de pressão?,Preciso de receita médica para pegar remédio de pressão.,0.1111,1.498,Preciso de receita médica para pegar remédio de pressão?,0.0,6.296
+audio_06.mp3,pt-BR-AntonioNeural,1,De quanto em quanto tempo tenho que atualizar o CadÚnico?,De quanto em quanto tempo tem o que atualizar o cádio único?,0.4,0.996,De quanto em quanto tempo tenho que atualizar o CAD único?,0.2,7.504
+audio_07.mp3,pt-BR-AntonioNeural,1,Qual telefone eu ligo para pedir o BPC?,Conte ele fone o líco para pedir o BPC.,0.75,1.016,Com o telefone eu ligo para pedir o BPC.,0.375,6.252
+audio_08.mp3,pt-BR-AntonioNeural,1,Como consigo desconto na conta de luz pela Tarifa Social?,Como consigo desconto da conta de luz pelatar e fossocial?,0.4,1.136,como consigo desconto da conta de luz pela tarifa social.,0.2,7.49
+audio_09.mp3,pt-BR-FranciscaNeural,0,O Cartão do SUS é gratuito?,O cartão dos Susa gratuito.,0.6667,0.979,O cartão do SUS é gratuito.,0.1667,6.511
+audio_10.mp3,pt-BR-FranciscaNeural,0,Idoso acima de sessenta anos tem prioridade na UBS?,E 12 a cima de 60 anos tem prioridade na OBS.,0.6667,1.482,e 12 acima de 60 anos tem prioridade na OBS?,0.4444,6.822
+audio_11.mp3,pt-BR-FranciscaNeural,0,A receita de médico particular vale na Farmácia Popular?,A receita de médico particular vale na farmácia popular.,0.1111,1.107,A receita de médico particular vale na farmácia popular?,0.0,8.008
+audio_12.mp3,pt-BR-FranciscaNeural,0,Idoso pode tomar vacina da gripe de graça no SUS?,E dozo pode tomar vacina da gripe de graça no SUS?,0.2,1.109,Idoso pode tomar vacina da gripe de graça no SUS?,0.0,6.899
+audio_13.mp3,pt-BR-FranciscaNeural,0,Onde eu faço a inscrição no CadÚnico?,onde o faço a inscrição no Cádio único.,0.4286,1.458,onde eu faço a inscrição no Cade Único.,0.2857,7.445
+audio_14.mp3,pt-BR-FranciscaNeural,0,O que acontece se eu não atualizar o meu cadastro?,O que acontece se eu não atualizar o meu cadáestro?,0.1,1.064,O que acontece se eu não atualizar o meu cadastro?,0.0,7.747
+audio_15.mp3,pt-BR-ThalitaMultilingualNeural,0,Quais documentos o responsável familiar precisa levar no CRAS?,Quais documentos o responsável familiar precisa levar no crás?,0.1111,1.131,Quais documentos o responsável familiar precisa levar no CRAAS?,0.1111,6.721
+audio_16.mp3,pt-BR-ThalitaMultilingualNeural,0,Quem tem direito ao BPC por idade?,Quem tem direito ao BPC-preidade?,0.4286,1.008,Quem tem direito ao BPC por idade?,0.0,7.511
+audio_17.mp3,pt-BR-ThalitaMultilingualNeural,0,Qual é o número do Disque Saúde?,Qual é o número do disco e saúde?,0.2857,0.972,Qual é o número do disc saúde?,0.1429,6.332
+audio_18.mp3,pt-BR-ThalitaMultilingualNeural,0,Qual é o telefone do SAMU para emergência?,Qual é o telefone do Samu para emergência?,0.0,1.481,Qual é o telefone do SAMU para emergência?,0.0,6.671
+audio_19.mp3,pt-BR-ThalitaMultilingualNeural,0,Preciso pagar alguma taxa para atualizar o CadÚnico?,Preciso pagar alguma taxa para atualizar o cade único.,0.25,1.023,Preciso pagar alguma taxa para atualizar o CAD único?,0.25,7.563
+audio_20.mp3,pt-BR-ThalitaMultilingualNeural,0,O que preciso levar para tomar vacina na UBS?,O que preciso levar para tomar vacina na OBS?,0.1111,1.035,O que preciso levar para tomar vacina na UBS?,0.0,6.298
