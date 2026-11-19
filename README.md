@@ -17,12 +17,12 @@ Este repositório reúne os itens desenvolvidos e entregues em cada disciplina d
 | Vídeo de Governança em IA e Business Analytics | **PREENCHER (YouTube, não listado)** |
 | Relatório de Governança (ABNT/FIAP) | **PREENCHER** |
 | Vídeo IoT (teste ao vivo) | https://youtube.com/shorts/_qvth7-RmWA |
-| Vídeo PLN | https://youtu.be/u5V6h_HPIoY |
-| Vídeo GenAI | https://youtu.be/Vuh5_UaCfeo |
-| Vídeo Visão Computacional | https://youtu.be/RdhAdSJ7MaY |
-| Vídeo Front-end | **PREENCHER** |
-| Vídeo RPA | **PREENCHER** |
-| Deploy do Front-end | **PREENCHER** |
+| Vídeo PLN | https://youtu.be/Y7p-Rb2cKwg |
+| Vídeo GenAI | https://youtu.be/BJQjDnIsgYk |
+| Vídeo Visão Computacional | https://youtu.be/s6kzH4DmsZ8 |
+| Vídeo Front-end | https://youtu.be/W1fvL07ybzc |
+| Vídeo RPA | Não exigido pelo enunciado de RPA; evidências de execução, métricas e falha tratada em [`RPA/rpa-ouviai/exemplos_saida/`](RPA/rpa-ouviai/exemplos_saida/) |
+| Deploy do Front-end | Docker: `docker compose up --build` em [`citizentech/`](citizentech/README.md#4-como-executar) |
 
 ## Disciplinas e pastas
 

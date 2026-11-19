@@ -21,15 +21,19 @@ def transporte(status=200, corpo=None):
     return httpx.MockTransport(responder), enviado
 
 
-def test_tool_use_forcado_com_schema_do_pydantic():
-    corpo = {"id": "msg_1", "type": "message", "role": "assistant", "model": "m", "stop_reason": "tool_use",
-             "content": [{"type": "tool_use", "id": "t1", "name": "registrar_triagem", "input": TRIAGEM}],
+def test_saida_estruturada_com_schema_do_pydantic():
+    corpo = {"id": "msg_1", "type": "message", "role": "assistant", "model": "m", "stop_reason": "end_turn",
+             "content": [{"type": "text", "text": json.dumps(TRIAGEM)}],
              "usage": {"input_tokens": 1, "output_tokens": 1}}
     t, enviado = transporte(corpo=corpo)
     llm = AnthropicLLM("chave-falsa", "claude-sonnet-5-5", 5, http_client=httpx.AsyncClient(transport=t))
     assert asyncio.run(llm.estruturar("sys", "pedido", TriagemIA)) == TRIAGEM
-    assert enviado["tool_choice"] == {"type": "tool", "name": "registrar_triagem"}
-    assert "$defs" not in json.dumps(enviado["tools"][0]["input_schema"])
+    fmt = enviado["output_config"]["format"]
+    assert fmt["type"] == "json_schema" and "tools" not in enviado
+    texto = json.dumps(fmt["schema"])
+    assert "$defs" not in texto and "maxLength" not in texto
+    assert fmt["schema"]["additionalProperties"] is False
+    assert set(fmt["schema"]["required"]) == set(TRIAGEM)
 
 
 def test_chave_recusada():

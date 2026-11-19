@@ -21,7 +21,7 @@ class RespostaInvalida(Exception):
 SYSTEM = """Você faz a triagem de pedidos de ajuda do OuviAí, um serviço para pessoas com deficiência auditiva e idosas em São Paulo.
 Quem escreve muitas vezes não consegue usar telefone, então a orientação precisa resolver por texto, app, site ou presencialmente.
 
-Preencha a ferramenta registrar_triagem:
+Responda com o JSON da triagem, com estes campos:
 - categoria: saude_auditiva (aparelho auditivo, consulta, SUS), beneficio_bpc (BPC/LOAS, Cadastro Único), direitos_idoso, transporte, manutencao_urbana (calçada, buraco, fissura, iluminação), golpe (pedem código, senha, PIX ou dados), outro
 - urgencia: alta = risco imediato à pessoa, golpe acontecendo agora ou perigo na via; media = precisa de ação nos próximos dias; baixa = informação
 - resumo: uma frase
